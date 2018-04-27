@@ -1,4 +1,7 @@
+from scanner import Scanner
+
 import sys
+
 
 def log(*args):
     print(*args)
@@ -10,59 +13,50 @@ class Lox:
         pass
 
     # 读入文件，执行
-    def runFile(self, path):
+    def run_file(self, path):
         log(path)
-        if self.had_error:
-            sys.exit(65)
-
         source = open(path, 'r')
         self.run(source)
+        if self.had_error:
+            sys.exit(65)
         source.close()
 
     # repl
-    def runPrompt(self):
+    def run_prompt(self):
         while True:
             try:
                 line = input(">>> ")
                 self.run(line)
-                self.had_error = False                
+                self.had_error = False
             except KeyboardInterrupt:
                 sys.exit()
 
     def run(self, source):
-        print(source)
-        scanner = Scanner()
-        tokens = []
-        tokens.append(scanner.scanTokens())
-        
+        scanner = Scanner(source)
+        scanner.clear_input()
+        tokens = scanner.scan_tokens()
+
         for token in tokens:
             print(token)
-    
+
     @staticmethod
-    def error(self, line, message):
-        self.report(line, "", message)
-    
+    def error(line, message):
+        Lox.report(line, "", message)
+
     @staticmethod
-    def report(self, line, where, message):
-        sys.stderr.write("[line " + line + "] Error " + where + ": " + message)
-        self.had_error = True
+    def report(line, where, message):
+        sys.stderr.write("[line " + str(line) + "] Error "
+                         + where + ": " + message + "\n")
+        Lox.had_error = True
     
-# Lexical analysis
-class Scanner:
-    def __init__(self):
-        pass
-    
-    # 
-    def scanTokens(self):
-        pass
 
 if __name__ == "__main__":
     lox = Lox()
     arg_len = len(sys.argv)
 
-    if (arg_len > 2):
+    if arg_len > 2:
         print("Usage: plox [script]")
     elif arg_len == 2:
-        lox.runFile(sys.argv[1])
+        lox.run_file(sys.argv[1])
     else:
-        lox.runPrompt()
+        lox.run_prompt()
