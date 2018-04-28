@@ -3,6 +3,7 @@ from token_type import TokenType
 from error import LoxError
 from utils import log
 
+
 # Lexical analysis
 class Scanner:
     tokens = []
@@ -75,8 +76,6 @@ class Scanner:
                 self.add_token(tokens[c][m])
             else:
                 self.add_token(tokens[c])
-            
-            
         else:
             LoxError.error(self.line, "Unexpected character.")
 

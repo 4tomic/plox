@@ -1,11 +1,12 @@
 from enum import Enum
 
+
 class TokenType(Enum):
     # Single - character tokens.
     LEFT_PAREN = 1
-    RIGHT_PAREN =2
-    LEFT_BRACE =3
-    RIGHT_BRACE =4
+    RIGHT_PAREN = 2
+    LEFT_BRACE = 3
+    RIGHT_BRACE = 4
     COMMA = 5
     DOT = 6
     MINUS = 7
@@ -37,7 +38,7 @@ class TokenType(Enum):
     FUN = 45
     FOR = 46
     IF = 47
-    NIL =48
+    NIL = 48
     OR = 49
     PRINT = 50
     RETURN = 51

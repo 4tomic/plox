@@ -3,8 +3,8 @@ from utils import log
 from error import LoxError
 import sys
 
-class Lox:
 
+class Lox:
     def __init__(self):
         pass
 
@@ -34,7 +34,7 @@ class Lox:
 
         for token in tokens:
             print(token)
-    
+
 
 if __name__ == "__main__":
     lox = Lox()

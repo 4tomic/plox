@@ -1,5 +1,6 @@
 import sys
 
+
 class LoxError:
     had_error = False
 
