@@ -11,11 +11,11 @@ class Lox:
     # 读入文件，执行
     def run_file(self, path):
         log(path)
-        source = open(path, 'r')
-        self.run(source)
-        if self.had_error:
+        with open(path, 'r') as lines:
+            for line in lines:
+                self.run(line)
+        if LoxError.had_error:
             sys.exit(65)
-        source.close()
 
     # repl
     def run_prompt(self):
