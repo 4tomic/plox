@@ -51,6 +51,10 @@ class Scanner:
                 '-1':  TokenType.GREATER,
                 '=': TokenType.GREATER_EQUAL
             },
+            '//': {
+                '-1': TokenType.SLASH,                
+                '//': ''
+            },
         }
 
         c = self.advance()
@@ -61,6 +65,8 @@ class Scanner:
                 else:
                     m = '-1'
                 self.add_token(tokens[c][m])
+            else:
+                self.add_token(tokens[c])
         else:
             LoxError.error(self.line, "Unexpected character.")
 
