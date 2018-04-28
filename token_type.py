@@ -49,3 +49,4 @@ class TokenType(Enum):
     WHILE = 56
 
     EOF = 100
+    BLANK_CHAR = 101
