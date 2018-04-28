@@ -51,9 +51,9 @@ class Scanner:
                 '-1':  TokenType.GREATER,
                 '=': TokenType.GREATER_EQUAL
             },
-            '//': {
+            '/': {
                 '-1': TokenType.SLASH,                
-                '//': ''
+                '/': ''
             },
         }
 
@@ -65,8 +65,18 @@ class Scanner:
                 else:
                     m = '-1'
                 self.add_token(tokens[c][m])
+            elif c == '/':
+                if self.match('/'):
+                    m = '/'
+                    while (self.peek() != '\n') and (not self.is_at_end()):
+                        self.advance()
+                else:
+                    m = '-1'
+                self.add_token(tokens[c][m])
             else:
                 self.add_token(tokens[c])
+            
+            
         else:
             LoxError.error(self.line, "Unexpected character.")
 
@@ -85,6 +95,11 @@ class Scanner:
             return False
         self.current += 1
         return True
+    
+    def peek(self):
+        if self.is_at_end():
+            return '\0'
+        return self.source[self.current]
 
     def add_token(self, token_type, literal=''):
         # log(type (self.current))
