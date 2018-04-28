@@ -1,10 +1,6 @@
 from scanner import Scanner
-
+from utils import log
 import sys
-
-
-def log(*args):
-    print(*args)
 
 class Lox:
     had_error = False
