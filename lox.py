@@ -1,9 +1,9 @@
 from scanner import Scanner
 from utils import log
+from error import LoxError
 import sys
 
 class Lox:
-    had_error = False
 
     def __init__(self):
         pass
@@ -23,7 +23,7 @@ class Lox:
             try:
                 line = input(">>> ")
                 self.run(line)
-                self.had_error = False
+                LoxError.had_error = False
             except KeyboardInterrupt:
                 sys.exit()
 
@@ -34,16 +34,6 @@ class Lox:
 
         for token in tokens:
             print(token)
-
-    @staticmethod
-    def error(line, message):
-        Lox.report(line, "", message)
-
-    @staticmethod
-    def report(line, where, message):
-        sys.stderr.write("[line " + str(line) + "] Error "
-                         + where + ": " + message + "\n")
-        Lox.had_error = True
     
 
 if __name__ == "__main__":

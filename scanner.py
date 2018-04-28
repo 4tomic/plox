@@ -1,8 +1,7 @@
 from token import Token
 from token_type import TokenType
-
-def log(*args):
-    print(*args)
+from error import LoxError
+fro utils import log
 
 # Lexical analysis
 class Scanner:
@@ -42,7 +41,7 @@ class Scanner:
         if c in tokens.keys():
             self.add_token(tokens[c])
         else:
-            print(self.line, "Unexpected character.")
+            LoxError.error(self.line, "Unexpected character.")
 
     def is_at_end(self):
         return self.current >= len(self.source)
