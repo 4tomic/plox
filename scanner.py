@@ -1,7 +1,7 @@
 from token import Token
 from token_type import TokenType
 from error import LoxError
-fro utils import log
+from utils import log
 
 # Lexical analysis
 class Scanner:
@@ -34,12 +34,33 @@ class Scanner:
             '-': TokenType.MINUS,
             '+': TokenType.PLUS,
             ';': TokenType.SEMICOLON,
-            '*': TokenType.STAR
+            '*': TokenType.STAR,
+            '!': {
+                '-1':  TokenType.BANG,
+                '=': TokenType.BANG_EQUAL
+            },
+            '=': {
+                '-1':  TokenType.EQUAL,
+                '=': TokenType.EQUAL_EQUAL
+            },
+            '<': {
+                '-1':  TokenType.LESS,
+                '=': TokenType.LESS_EQUAL
+            },
+            '>': {
+                '-1':  TokenType.GREATER,
+                '=': TokenType.GREATER_EQUAL
+            },
         }
 
         c = self.advance()
         if c in tokens.keys():
-            self.add_token(tokens[c])
+            if c in '!=<>':
+                if self.match('='):
+                    m = '='
+                else:
+                    m = '-1'
+                self.add_token(tokens[c][m])
         else:
             LoxError.error(self.line, "Unexpected character.")
 
@@ -50,6 +71,14 @@ class Scanner:
     def advance(self):
         self.current += 1
         return self.source[self.current - 1]
+
+    def match(self, expected):
+        if self.is_at_end():
+            return False
+        if self.source[self.current] != expected:
+            return False
+        self.current += 1
+        return True
 
     def add_token(self, token_type, literal=''):
         # log(type (self.current))
