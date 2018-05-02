@@ -3,5 +3,5 @@ utils
 """
 
 
-def log(*args):
-    print(*args)
+def log(*args, **kwargs):
+    print(*args, **kwargs)
