@@ -30,8 +30,9 @@ class Visitor(object):
     def visit(self, node, *args, **kwargs):
         method = None
         for cls in node.__class__.__mro__:
-            meth_name = 'visit_' + cls.__name__
-            method = getattr(self, meth_name, None)
+            print(node.__class__.__mro__)
+            method_name = 'visit_' + cls.__name__
+            method = getattr(self, method_name, None)
             if method:
                 break
 

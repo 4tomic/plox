@@ -167,7 +167,7 @@ class Scanner:
     def is_at_end(self):
         return self.current >= len(self.source)
 
-    # 移进一位，并返回当前 char
+    # return current char, and advance one char
     def advance(self):
         self.current += 1
         return self.source[self.current - 1]

@@ -8,7 +8,7 @@ class Lox:
     def __init__(self):
         pass
 
-    # 读入文件，执行
+    # read source file and execute
     def run_file(self, path):
         log(path)
         with open(path, 'r') as lines:

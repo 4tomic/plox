@@ -13,11 +13,39 @@ class {class_name}({base_name}):
 {init}
 """
 
+_visitor_template = """\
+
+class Visitor(object):
+    def visit(self, visitor_cls, *args, **kwargs):
+        method = None
+        for cls in visitor_cls.__class__.__mro__:
+            print(visitor_cls.__class__.__mro__)
+            method_name = 'visit_' + cls.__name__
+            method = getattr(self, method_name, None)
+            if method:
+                break
+        if not method:
+            method = self.hello
+
+        return method(visitor_cls, *args, **kwargs)
+    
+    def hello(self, visitor, *args, **kwargs):
+        print('Visitor.hello() says hello call by ' + visitor.__name__)
+    
+{visit_func}
+"""
+
+_visit_func = """\
+def visit_{derived}(self, visitor, *args, **kwargs):
+    print(visitor.__name__ + ' visit_{derived}')
+"""
+
 
 class GenerateAST:
     def __init__(self):
         pass
 
+    # using exec to construct code
     def meta(self, base_name):
         class_definition = _class_template.format(
             base_name=base_name,
@@ -29,11 +57,14 @@ class GenerateAST:
         result._source = class_definition
         log(result._source)
 
+    # pure string manipulate construction
+    # generate AST classes
     def define_ast(self, output, base_name, types):
         class_definition = _class_template.format(
             base_name=base_name,
         )
 
+        # define expression classes
         inner_class = ''
         for class_name, fields in types.items():
             # log(class_name, ':', fields)
@@ -46,12 +77,17 @@ class GenerateAST:
         # result._source = class_definition
         # log(result._source)
 
+        # define visitor
+        visitor_class = ''
+        class_names = types.keys()
+        visitor_class += self.define_visitor(class_names)
+
         path = output + '/' + base_name.lower() + '.py'
         log(path)
         # with open(path, 'w') as f:
         #     f.write(class_definition + inner_class)
         f = open(path, 'w')
-        f.write(class_definition + inner_class)
+        f.write(class_definition + inner_class + visitor_class)
         f.close()
 
     @staticmethod
@@ -72,6 +108,21 @@ class GenerateAST:
             base_name=base_name,
             property=', '.join(properties),
             init=init,
+        )
+
+        return class_definition
+
+    def define_visitor(self, class_names):
+        visit_func = ''
+        four_blank = '    '
+        str1 = 'def visit_{derived}(self, visitor, *args, **kwargs):\n'
+        str2 = "print(visitor.__name__ + 'visit_{derived}')\n\n"
+        for class_name in class_names:
+            visit_func += four_blank + str1.format(derived=class_name) \
+                          + four_blank * 2 + str2.format(derived=class_name)
+
+        class_definition = _visitor_template.format(
+            visit_func=visit_func
         )
 
         return class_definition
